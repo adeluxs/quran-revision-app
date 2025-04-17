@@ -1,0 +1,26 @@
+/* Swiper Slide Scaling */
+.swiper-slide {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .swiper-slide-active {
+    transform: scale(0.1);  /* Scale up the active slide */
+    opacity: 1;
+  }
+  
+  .swiper-slide-prev, .swiper-slide-next {
+    transform: scale(0.9);  /* Slightly reduce the scale of non-active slides */
+    opacity: 0.7;
+  }
+  
+
+  .moon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    box-shadow: 15px 15px 0 0 #fff;
+  }
+  
+  #mobile-nav{
+    z-index: 999;
+  }
