@@ -23,3 +23,6 @@ Route::post('/register', [CustomAuthController::class, 'register']);
 
 // Logout
 Route::post('/logout', [CustomAuthController::class, 'logout'])->name('logout');
+
+// Logout
+Route::post('/password-request', [CustomAuthController::class, 'password-request'])->name('password.request');

@@ -13,14 +13,12 @@
     opacity: 0.7;
   }
   
-
-  .moon {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    box-shadow: 15px 15px 0 0 #fff;
-  }
   
   #mobile-nav{
     z-index: 999;
+  }
+
+  .login-img{
+    width:100%;
+    height:100%;
   }
