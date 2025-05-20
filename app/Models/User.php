@@ -22,7 +22,13 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'country',
+        'memorized_juz',
+        'available_days',
+        'available_time',
+        'bio',
     ];
+    
 
     /**
      * The attributes that should be hidden for serialization.
@@ -32,6 +38,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        
     ];
 
     /**
@@ -44,6 +51,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'memorized_juz' => 'array',
+            'available_days' => 'array',
         ];
     }
 
@@ -58,4 +67,63 @@ class User extends Authenticatable
      {
          return $this->role->name === $role;
      }
+
+
+     // march partner
+     public function matchablePartners()
+{
+    return User::where('id', '!=', $this->id)
+        ->whereJsonContains('memorized_juz', $this->memorized_juz[0]) // match by at least 1 juz
+        ->whereJsonContains('available_days', $this->available_days)  // Match users with overlapping availability
+        ->get();
+}
+
+
+public function sessions()
+{
+    return $this->hasMany(RevisionSession::class, 'user_id');
+}
+
+public function partnerSessions()
+{
+    return $this->hasMany(RevisionSession::class, 'partner_id');
+}
+
+//check for accepted partners requested by the  authenticated user only
+public function acceptedPartners()
+{
+    return $this->belongsToMany(User::class, 'partners', 'user_id', 'partner_id')
+     ->wherePivot('status', 'accepted');
+}
+
+public function receivedAcceptedPartners()
+{
+    return $this->belongsToMany(User::class, 'partners', 'partner_id', 'user_id')
+        ->wherePivot('status', 'accepted');
+}
+
+//check for accepted partners accepted by the  authenticated user
+
+public function sentPartnerRequests()
+{
+    return $this->hasMany(Partner::class, 'user_id');
+}
+
+//check for  both accepted partners accepted by the  authenticated user & accepted partners requested by the  authenticated user 
+
+public function allAcceptedPartners()
+{
+    $sent = $this->acceptedPartners()->get();
+    $received = $this->receivedAcceptedPartners()->get();
+
+    return $sent->merge($received)->unique('id');
+}
+
+
+public function receivedPartnerRequests()
+{
+    return $this->hasMany(Partner::class, 'partner_id');
+}
+
+
 }

@@ -30,7 +30,7 @@ class CustomAuthController extends Controller
             if ($user->hasRole('admin')) {
                 return redirect()->route('admin.dashboard');
             } else {
-                return redirect()->route('user.dashboard');
+                return redirect()->route('user.dashboard')->with('success', 'LogedIn successfully.');
             }
         }
 
@@ -82,7 +82,7 @@ class CustomAuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect('/dashboard');
+        return redirect()->route('user.dashboard')->with('success', 'Registered successfully.');
     }
 
     public function logout(Request $request)
